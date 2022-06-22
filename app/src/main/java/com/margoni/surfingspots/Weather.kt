@@ -1,6 +1,6 @@
 package com.margoni.surfingspots
 
-data class Weather(val city: String, val degrees: Int, val imageUrl: String) {
+data class Weather(val city: City, val temperature: Int) {
     val isSunny: Boolean
-        get() = degrees >= 30
+        get() = temperature >= 30
 }

@@ -20,9 +20,12 @@ class WeatherListActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@WeatherListActivity)
         }
 
-        val viewModel: WeatherListViewModel by viewModels()
+        val viewModel: WeatherListViewModel by viewModels {
+            WeatherListViewModelFactory(WeatherRepositoryImpl())
+        }
 
         viewModel.list().observe(this) { list ->
+            println(list.map { it.temperature })
             weatherListAdapter.submitList(list)
         }
     }

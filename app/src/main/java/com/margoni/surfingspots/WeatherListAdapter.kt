@@ -21,9 +21,9 @@ class WeatherListAdapter :
 
         fun bind(weather: Weather) {
             binding.apply {
-                cityName.text = weather.city
+                cityName.text = weather.city.name
                 weatherDescription.text =
-                    "${if (weather.isSunny) "Sunny" else "Cloudy"} - ${weather.degrees} degrees"
+                    "${if (weather.isSunny) "Sunny" else "Cloudy"} - ${weather.temperature} degrees"
 
                 val foregroundColor =
                     if (weather.isSunny) R.color.sunny_foreground else R.color.cloudy_foreground
@@ -31,7 +31,7 @@ class WeatherListAdapter :
                     ColorDrawable(ContextCompat.getColor(context, foregroundColor))
 
                 Glide.with(context)
-                    .load(weather.imageUrl)
+                    .load(weather.city.imageUrl)
                     .centerCrop()
                     .into(cityImage);
             }
@@ -50,7 +50,7 @@ class WeatherListAdapter :
     private class WeatherDiffCallback : DiffUtil.ItemCallback<Weather>() {
 
         override fun areItemsTheSame(oldItem: Weather, newItem: Weather): Boolean {
-            return oldItem == newItem
+            return oldItem.city.name == newItem.city.name
         }
 
         override fun areContentsTheSame(oldItem: Weather, newItem: Weather): Boolean {
