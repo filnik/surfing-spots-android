@@ -5,12 +5,14 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.margoni.surfingspots.databinding.WeatherItemBinding
 
-class WeatherListAdapter(private val weatherList: List<Weather>) :
-    RecyclerView.Adapter<WeatherListAdapter.WeatherViewHolder>() {
+class WeatherListAdapter :
+    ListAdapter<Weather, WeatherListAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
 
     class WeatherViewHolder(
         private val binding: WeatherItemBinding,
@@ -42,11 +44,18 @@ class WeatherListAdapter(private val weatherList: List<Weather>) :
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        holder.bind(weatherList[position])
+        holder.bind(currentList[position])
     }
 
-    override fun getItemCount(): Int {
-        return weatherList.size
-    }
+    private class WeatherDiffCallback : DiffUtil.ItemCallback<Weather>() {
 
+        override fun areItemsTheSame(oldItem: Weather, newItem: Weather): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Weather, newItem: Weather): Boolean {
+            return oldItem == newItem
+        }
+
+    }
 }

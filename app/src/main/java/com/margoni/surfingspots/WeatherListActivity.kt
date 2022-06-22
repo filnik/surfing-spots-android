@@ -7,6 +7,7 @@ import com.margoni.surfingspots.databinding.ActivityWeatherListBinding
 
 class WeatherListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWeatherListBinding
+    private val weatherListAdapter = WeatherListAdapter()
 
     private val sampleList = listOf(
         Weather("Roma", 31, "https://media-cdn.tripadvisor.com/media/photo-s/16/dd/3e/b1/el-coliseo-de-roma.jpg"),
@@ -20,9 +21,11 @@ class WeatherListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.weatherList.apply {
-            adapter = WeatherListAdapter(sampleList)
+            adapter = weatherListAdapter
             layoutManager = LinearLayoutManager(this@WeatherListActivity)
         }
+
+        weatherListAdapter.submitList(sampleList)
     }
 
 }
