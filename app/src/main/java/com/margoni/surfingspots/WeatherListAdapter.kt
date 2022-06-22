@@ -9,11 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.margoni.surfingspots.databinding.WeatherItemBinding
 
-data class Weather(val city: String, val degrees: Int, val imageUrl: String) {
-    val isSunny: Boolean
-        get() = degrees >= 30
-}
-
 class WeatherListAdapter(private val weatherList: List<Weather>) :
     RecyclerView.Adapter<WeatherListAdapter.WeatherViewHolder>() {
 
