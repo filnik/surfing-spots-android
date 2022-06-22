@@ -1,11 +1,28 @@
 package com.margoni.surfingspots
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.margoni.surfingspots.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    private val sampleList = listOf<Weather>(
+        Weather("Trento", 29),
+        Weather("Roma", 31)
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.weatherList.apply {
+            adapter = WeatherListAdapter(sampleList)
+            layoutManager = LinearLayoutManager(this@MainActivity)
+        }
     }
+
+
 }
