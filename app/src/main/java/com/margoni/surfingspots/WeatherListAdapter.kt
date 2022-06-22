@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.margoni.surfingspots.databinding.WeatherItemBinding
 
-data class Weather(val city: String, val degrees: Int) {
+data class Weather(val city: String, val degrees: Int, val imageUrl: String) {
     val isSunny: Boolean
         get() = degrees >= 30
 }
@@ -26,10 +27,16 @@ class WeatherListAdapter(private val weatherList: List<Weather>) :
                 cityName.text = weather.city
                 weatherDescription.text =
                     "${if (weather.isSunny) "Sunny" else "Cloudy"} - ${weather.degrees} degrees"
+
                 val foregroundColor =
                     if (weather.isSunny) R.color.sunny_foreground else R.color.cloudy_foreground
-                cityBackground.foreground =
+                cityImage.foreground =
                     ColorDrawable(ContextCompat.getColor(context, foregroundColor))
+
+                Glide.with(context)
+                    .load(weather.imageUrl)
+                    .centerCrop()
+                    .into(cityImage);
             }
         }
     }
