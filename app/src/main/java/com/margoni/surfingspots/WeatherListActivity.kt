@@ -3,10 +3,10 @@ package com.margoni.surfingspots
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.margoni.surfingspots.databinding.ActivityMainBinding
+import com.margoni.surfingspots.databinding.ActivityWeatherListBinding
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+class WeatherListActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityWeatherListBinding
 
     private val sampleList = listOf(
         Weather("Roma", 31, "https://media-cdn.tripadvisor.com/media/photo-s/16/dd/3e/b1/el-coliseo-de-roma.jpg"),
@@ -16,12 +16,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityWeatherListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.weatherList.apply {
             adapter = WeatherListAdapter(sampleList)
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(this@WeatherListActivity)
         }
     }
 
