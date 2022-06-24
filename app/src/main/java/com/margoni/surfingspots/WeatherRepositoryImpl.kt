@@ -13,7 +13,8 @@ import kotlin.random.Random
 private const val THREE_SECONDS = 3000L
 
 class WeatherRepositoryImpl(
-    private val defaultDispatcher: CoroutineDispatcher = Default
+    private val defaultDispatcher: CoroutineDispatcher = Default,
+    private val refreshIntervalMs: Long = THREE_SECONDS
 ) : WeatherRepository {
 
     private val cityList = listOf(
@@ -63,7 +64,7 @@ class WeatherRepositoryImpl(
                 index = 0
             }
 
-            delay(THREE_SECONDS)
+            delay(refreshIntervalMs)
         }
     }
 
