@@ -1,4 +1,4 @@
-package com.margoni.surfingspots.data.network.client
+package com.margoni.surfingspots.data.network.client.cities
 
 import com.margoni.surfingspots.data.network.model.CitiesApiResponse
 
