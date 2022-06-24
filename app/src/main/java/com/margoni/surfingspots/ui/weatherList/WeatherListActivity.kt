@@ -4,11 +4,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.margoni.surfingspots.data.CityDataSourceImpl
-import com.margoni.surfingspots.data.WeatherRepositoryImpl
-import com.margoni.surfingspots.data.network.client.cities.CitiesApiClient
-import com.margoni.surfingspots.data.network.client.HttpClientImpl
 import com.margoni.surfingspots.databinding.ActivityWeatherListBinding
+import com.margoni.surfingspots.factory.Factory
 
 class WeatherListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWeatherListBinding
@@ -25,10 +22,7 @@ class WeatherListActivity : AppCompatActivity() {
         }
 
         val viewModel: WeatherListViewModel by viewModels {
-            WeatherListViewModelFactory(WeatherRepositoryImpl(CityDataSourceImpl(CitiesApiClient(
-                HttpClientImpl(),
-                endpoint = "https://run.mocky.io/v3/652ceb94-b24e-432b-b6c5-8a54bc1226b6"
-            ))))
+            WeatherListViewModelFactory(Factory.WeatherRepository())
         }
 
         viewModel.list().observe(this) { list ->
@@ -38,3 +32,4 @@ class WeatherListActivity : AppCompatActivity() {
     }
 
 }
+
