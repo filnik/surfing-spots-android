@@ -1,5 +1,6 @@
 package com.margoni.surfingspots.data.network.client.cities
 
+import com.margoni.surfingspots.BuildConfig
 import com.margoni.surfingspots.data.network.client.HttpClient
 import com.margoni.surfingspots.data.network.model.CitiesApiResponse
 import com.squareup.moshi.Moshi
@@ -10,11 +11,12 @@ import kotlinx.coroutines.withContext
 
 class CitiesApiClient(
     private val client: HttpClient,
+    private val endpoint: String = BuildConfig.CITIES_API_ENDPOINT,
     private val ioDispatcher: CoroutineDispatcher = IO
 ) : CitiesApi {
 
     override suspend fun fetch(): CitiesApiResponse = withContext(ioDispatcher) {
-        val json = client.get("https://run.mocky.io/v3/652ceb94-b24e-432b-b6c5-8a54bc1226b6")
+        val json = client.get(endpoint)
 
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 

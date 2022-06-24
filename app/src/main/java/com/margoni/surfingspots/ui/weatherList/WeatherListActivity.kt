@@ -26,7 +26,8 @@ class WeatherListActivity : AppCompatActivity() {
 
         val viewModel: WeatherListViewModel by viewModels {
             WeatherListViewModelFactory(WeatherRepositoryImpl(CityDataSourceImpl(CitiesApiClient(
-                HttpClientImpl()
+                HttpClientImpl(),
+                endpoint = "https://run.mocky.io/v3/652ceb94-b24e-432b-b6c5-8a54bc1226b6"
             ))))
         }
 

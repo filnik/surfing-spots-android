@@ -21,9 +21,15 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "CITIES_API_ENDPOINT", CITIES_API_ENDPOINT
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "CITIES_API_ENDPOINT", CITIES_API_ENDPOINT
         }
     }
     compileOptions {
