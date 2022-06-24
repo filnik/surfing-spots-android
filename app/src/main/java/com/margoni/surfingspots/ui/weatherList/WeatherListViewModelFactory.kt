@@ -1,7 +1,8 @@
-package com.margoni.surfingspots
+package com.margoni.surfingspots.ui.weatherList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.margoni.surfingspots.data.WeatherRepository
 
 class WeatherListViewModelFactory(private val repository: WeatherRepository):
     ViewModelProvider.Factory {

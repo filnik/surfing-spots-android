@@ -1,8 +1,9 @@
-package com.margoni.surfingspots
+package com.margoni.surfingspots.data
 
+import com.margoni.surfingspots.domain.model.City
+import com.margoni.surfingspots.domain.model.Weather
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.Default
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector

@@ -1,9 +1,10 @@
-package com.margoni.surfingspots
+package com.margoni.surfingspots.ui.weatherList
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.margoni.surfingspots.data.WeatherRepositoryImpl
 import com.margoni.surfingspots.databinding.ActivityWeatherListBinding
 
 class WeatherListActivity : AppCompatActivity() {

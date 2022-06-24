@@ -1,4 +1,4 @@
-package com.margoni.surfingspots
+package com.margoni.surfingspots.ui.weatherList
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.margoni.surfingspots.R
 import com.margoni.surfingspots.databinding.WeatherItemBinding
+import com.margoni.surfingspots.domain.model.Weather
 
 class WeatherListAdapter :
     ListAdapter<Weather, WeatherListAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
