@@ -1,14 +1,21 @@
 package com.margoni.surfingspots
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlin.random.Random
 
 private const val THREE_SECONDS = 3000L
 
-class WeatherRepositoryImpl : WeatherRepository {
+class WeatherRepositoryImpl(
+    private val defaultDispatcher: CoroutineDispatcher = Default
+) : WeatherRepository {
+
     private val cityList = listOf(
         City(
             "Cuba",
@@ -38,7 +45,7 @@ class WeatherRepositoryImpl : WeatherRepository {
             .also { emit(it) }
 
         updateRandomly(weathers)
-    }
+    }.flowOn(defaultDispatcher)
 
     private suspend fun FlowCollector<List<Weather>>.updateRandomly(
         weathers: MutableList<Weather>
@@ -60,7 +67,10 @@ class WeatherRepositoryImpl : WeatherRepository {
         }
     }
 
-    private fun MutableList<Weather>.updateTemperatureOf(index: Int, temperature: Int): MutableList<Weather> {
+    private fun MutableList<Weather>.updateTemperatureOf(
+        index: Int,
+        temperature: Int
+    ): MutableList<Weather> {
         this[index] = this[index].copy(temperature = temperature)
         return this
     }
