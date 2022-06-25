@@ -9,7 +9,8 @@ class CityDataSourceImpl(
 ) : CityDataSource {
 
     override suspend fun list(): List<City> {
-        return api.fetch().cities.map { City(it.name, images.imageFor(it.name)) }
+        val response = api.fetch()
+        return response.cities.map { City(it.name, images.imageFor(it.name)) }
     }
 
 }
