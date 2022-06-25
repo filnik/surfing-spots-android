@@ -9,7 +9,8 @@ object Factory {
 
     fun WeatherRepository(): WeatherRepository {
         return WeatherRepositoryImpl(
-            CityDataSource()
+            CityDataSource(),
+            LocalTemperatureGenerator()
         )
     }
 
