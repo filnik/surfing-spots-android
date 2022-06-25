@@ -14,7 +14,8 @@ object Factory {
         return WeatherRepositoryImpl(
             cityDataSource = cityDataSource(),
             localRandomTemperatureGenerator = LocalRandomTemperatureGenerator(),
-            remoteRandomTemperatureGenerator = RemoteRandomTemperatureGenerator(randomNumberApi())
+            remoteRandomTemperatureGenerator = RemoteRandomTemperatureGenerator(randomNumberApi()),
+            randomSequenceGenerator = RandomSequenceGeneratorImpl()
         )
     }
 

@@ -15,6 +15,7 @@ class WeatherRepositoryImpl(
     private val cityDataSource: CityDataSource,
     private val localRandomTemperatureGenerator: RandomTemperatureGenerator,
     private val remoteRandomTemperatureGenerator: RemoteRandomTemperatureGenerator,
+    private val randomSequenceGenerator: RandomSequenceGenerator,
     private val defaultDispatcher: CoroutineDispatcher = Default,
     private val refreshIntervalMs: Long = THREE_SECONDS
 ) : WeatherRepository {
@@ -22,39 +23,44 @@ class WeatherRepositoryImpl(
     override fun fetch(): Flow<List<Weather>> = flow {
         val cities = cityDataSource.list()
 
-        val weathers = cities.map { city -> Weather(city, localRandomTemperatureGenerator.generate()) }
-            .sortedByDescending { it.temperature }
-            .toMutableList()
-            .also { emit(it) }
+        val weathers =
+            cities.map { city -> Weather(city, localRandomTemperatureGenerator.generate()) }
+                .toMutableList()
+                .also { emit(it.sortedByDescendingTemperature()) }
 
-        refreshRandomlyOneAtATime(weathers)
-    }.flowOn(defaultDispatcher)
+        startUpdate(weathers)
+    }
+        .flowOn(defaultDispatcher)
 
-    private suspend fun FlowCollector<List<Weather>>.refreshRandomlyOneAtATime(
-        weathers: MutableList<Weather>
-    ) {
+    private suspend fun FlowCollector<List<Weather>>.startUpdate(weathers: MutableList<Weather>) {
         var index = 0
+        var randomSequence = randomSequenceGenerator.generate(size = weathers.size)
+
         while (true) {
-            weathers.updateTemperatureOf(index, remoteRandomTemperatureGenerator.generate())
-                .sortedByDescending { it.temperature }
-                .also { emit(it) }
+            delay(refreshIntervalMs)
+
+            weathers.updateTemperatureOf(
+                elementAt = randomSequence[index],
+                temperature = remoteRandomTemperatureGenerator.generate()
+            ).also { emit(it.sortedByDescendingTemperature()) }
 
             index++
 
             if (index == weathers.size) {
-                weathers.shuffle()
                 index = 0
+                randomSequence = randomSequenceGenerator.nextSequence(from = randomSequence)
             }
-
-            delay(refreshIntervalMs)
         }
     }
 
+    private fun Iterable<Weather>.sortedByDescendingTemperature() =
+        this.sortedByDescending { it.temperature }
+
     private fun MutableList<Weather>.updateTemperatureOf(
-        index: Int,
+        elementAt: Int,
         temperature: Int
     ): MutableList<Weather> {
-        this[index] = this[index].copy(temperature = temperature)
+        this[elementAt] = this[elementAt].copy(temperature = temperature)
         return this
     }
 

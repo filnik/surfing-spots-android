@@ -26,7 +26,6 @@ class WeatherListActivity : AppCompatActivity() {
         }
 
         viewModel.list().observe(this) { list ->
-            println(list.map { it.temperature })
             weatherListAdapter.submitList(list)
         }
     }
