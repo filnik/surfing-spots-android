@@ -2,27 +2,39 @@ package com.margoni.surfingspots.factory
 
 import com.margoni.surfingspots.data.*
 import com.margoni.surfingspots.data.network.client.HttpClientImpl
+import com.margoni.surfingspots.data.network.client.cities.CitiesApi
 import com.margoni.surfingspots.data.network.client.cities.CitiesApiClient
+import com.margoni.surfingspots.data.network.client.randomNumber.RandomNumberApi
+import com.margoni.surfingspots.data.network.client.randomNumber.RandomNumberApiClient
 import com.margoni.surfingspots.data.network.utils.MoshiJsonDeserializer
 
 object Factory {
 
     fun WeatherRepository(): WeatherRepository {
         return WeatherRepositoryImpl(
-            CityDataSource(),
-            LocalTemperatureGenerator()
+            cityDataSource = cityDataSource(),
+            localRandomTemperatureGenerator = LocalRandomTemperatureGenerator(),
+            remoteRandomTemperatureGenerator = RemoteRandomTemperatureGenerator(randomNumberApi())
         )
     }
 
-    private val jsonDeserializer = MoshiJsonDeserializer()
-
-    private fun CityDataSource(): CityDataSource {
+    private fun cityDataSource(): CityDataSource {
         return CityDataSourceImpl(
-            CitiesApiClient(
-                HttpClientImpl(),
-                jsonDeserializer
-            ),
+            citiesApiClient(),
             CityImageUrlDataSourceImpl()
+        )
+    }
+
+    private fun citiesApiClient(): CitiesApi {
+        return CitiesApiClient(
+            HttpClientImpl(),
+            MoshiJsonDeserializer()
+        )
+    }
+
+    private fun randomNumberApi(): RandomNumberApi {
+        return RandomNumberApiClient(
+            HttpClientImpl()
         )
     }
 

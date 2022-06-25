@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Surfing Spots</string>
+    <string name="numbers_api_domain">numbersapi.com</string>
 </resources>

@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+
 android {
     compileSdk 32
 
@@ -23,6 +24,7 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "CITIES_API_ENDPOINT", CITIES_API_ENDPOINT
+            buildConfigField "String", "RANDOM_NUMBER_ENDPOINT", RANDOM_NUMBER_ENDPOINT
         }
 
         release {
@@ -30,6 +32,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "CITIES_API_ENDPOINT", CITIES_API_ENDPOINT
+            buildConfigField "String", "RANDOM_NUMBER_ENDPOINT", RANDOM_NUMBER_ENDPOINT
         }
     }
     compileOptions {
@@ -40,6 +43,7 @@ android {
         jvmTarget = '1.8'
     }
 }
+
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'

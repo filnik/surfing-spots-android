@@ -14,7 +14,8 @@ private const val THREE_SECONDS = 3000L
 
 class WeatherRepositoryImpl(
     private val cityDataSource: CityDataSource,
-    private val localTemperatureGenerator: TemperatureGenerator,
+    private val localRandomTemperatureGenerator: RandomTemperatureGenerator,
+    private val remoteRandomTemperatureGenerator: RemoteRandomTemperatureGenerator,
     private val defaultDispatcher: CoroutineDispatcher = Default,
     private val refreshIntervalMs: Long = THREE_SECONDS
 ) : WeatherRepository {
@@ -22,7 +23,7 @@ class WeatherRepositoryImpl(
     override fun fetch(): Flow<List<Weather>> = flow {
         val cities = cityDataSource.list()
 
-        val weathers = cities.map { city -> Weather(city, localTemperatureGenerator.generate()) }
+        val weathers = cities.map { city -> Weather(city, localRandomTemperatureGenerator.generate()) }
             .sortedByDescending { it.temperature }
             .toMutableList()
             .also { emit(it) }
@@ -35,7 +36,7 @@ class WeatherRepositoryImpl(
     ) {
         var index = 0
         while (true) {
-            weathers.updateTemperatureOf(index, randomTemperature())
+            weathers.updateTemperatureOf(index, remoteRandomTemperatureGenerator.generate())
                 .sortedByDescending { it.temperature }
                 .also { emit(it) }
 
@@ -57,7 +58,5 @@ class WeatherRepositoryImpl(
         this[index] = this[index].copy(temperature = temperature)
         return this
     }
-
-    private fun randomTemperature() = Random.nextInt(0, 60)
 
 }
