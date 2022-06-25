@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlin.random.Random
 
 private const val THREE_SECONDS = 3000L
 
@@ -28,10 +27,10 @@ class WeatherRepositoryImpl(
             .toMutableList()
             .also { emit(it) }
 
-        updateRandomly(weathers)
+        refreshRandomlyOneAtATime(weathers)
     }.flowOn(defaultDispatcher)
 
-    private suspend fun FlowCollector<List<Weather>>.updateRandomly(
+    private suspend fun FlowCollector<List<Weather>>.refreshRandomlyOneAtATime(
         weathers: MutableList<Weather>
     ) {
         var index = 0
