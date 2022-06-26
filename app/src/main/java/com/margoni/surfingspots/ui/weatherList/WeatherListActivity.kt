@@ -25,7 +25,7 @@ class WeatherListActivity : AppCompatActivity() {
             WeatherListViewModelFactory(Factory.WeatherRepository())
         }
 
-        viewModel.list().observe(this) { list ->
+        viewModel.list.observe(this) { list ->
             weatherListAdapter.submitList(list)
         }
     }
