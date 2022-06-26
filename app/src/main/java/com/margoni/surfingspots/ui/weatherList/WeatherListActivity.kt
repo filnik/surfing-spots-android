@@ -3,15 +3,22 @@ package com.margoni.surfingspots.ui.weatherList
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.R.style.Base_Theme_AppCompat_Light_Dialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.margoni.surfingspots.databinding.ActivityWeatherListBinding
 import com.margoni.surfingspots.factory.Factory
-import com.margoni.surfingspots.ui.weatherList.mapper.WeatherListUiStateMapper
 import com.margoni.surfingspots.ui.weatherList.mapper.WeatherListUiStateMapperImpl
+import com.margoni.surfingspots.ui.weatherList.model.Error
 
 class WeatherListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWeatherListBinding
+
+    private val viewModel by viewModels<WeatherListViewModel> {
+        WeatherListViewModelFactory(Factory.WeatherRepository(), WeatherListUiStateMapperImpl())
+    }
+
     private val weatherListAdapter = WeatherListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,20 +31,27 @@ class WeatherListActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@WeatherListActivity)
         }
 
-        val viewModel: WeatherListViewModel by viewModels {
-            WeatherListViewModelFactory(Factory.WeatherRepository(), WeatherListUiStateMapperImpl())
-        }
-
         viewModel.list.observe(this) { uiState ->
             when (uiState) {
                 is WeatherListUiState.Success -> weatherListAdapter.submitList(uiState.list)
-                is WeatherListUiState.Error -> showError(uiState.exception)
+                is WeatherListUiState.Retrying -> showMessage(uiState.message)
+                is WeatherListUiState.Failure -> showErrorDialog(uiState.error)
             }
         }
     }
 
-    private fun showError(exception: Throwable) {
-        Toast.makeText(applicationContext, exception.message, Toast.LENGTH_SHORT).show()
+    private fun showMessage(message: String) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showErrorDialog(error: Error) {
+        MaterialAlertDialogBuilder(this, Base_Theme_AppCompat_Light_Dialog)
+            .setTitle(error.title)
+            .setMessage(error.message)
+            .setCancelable(false)
+            .setNegativeButton("close app") { _, _ -> finish() }
+            .setPositiveButton("resume") { _, _ -> viewModel.resume() }
+            .show()
     }
 
 }
