@@ -1,6 +1,7 @@
 package com.margoni.surfingspots.ui.weatherList
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,9 +26,16 @@ class WeatherListActivity : AppCompatActivity() {
             WeatherListViewModelFactory(Factory.WeatherRepository())
         }
 
-        viewModel.list.observe(this) { list ->
-            weatherListAdapter.submitList(list)
+        viewModel.list.observe(this) { uiState ->
+            when (uiState) {
+                is WeatherListUiState.Success -> weatherListAdapter.submitList(uiState.list)
+                is WeatherListUiState.Error -> showError(uiState.exception)
+            }
         }
+    }
+
+    private fun showError(exception: Throwable) {
+        Toast.makeText(applicationContext, exception.message, Toast.LENGTH_SHORT).show()
     }
 
 }

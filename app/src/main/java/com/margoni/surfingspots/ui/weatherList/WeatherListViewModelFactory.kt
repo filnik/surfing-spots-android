@@ -8,7 +8,7 @@ class WeatherListViewModelFactory(private val repository: WeatherRepository):
     ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return WeatherListViewModel(repository) as T
+        return WeatherListViewModel(repository, 3000) as T
     }
 
 }

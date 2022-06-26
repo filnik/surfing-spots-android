@@ -5,22 +5,42 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.margoni.surfingspots.data.WeatherRepository
-import com.margoni.surfingspots.domain.model.Weather
-import kotlinx.coroutines.flow.Flow
+import com.margoni.surfingspots.utils.Constants.THREE_SECONDS
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class WeatherListViewModel(private val repository: WeatherRepository) : ViewModel() {
+class WeatherListViewModel(
+    private val repository: WeatherRepository,
+    private val timeToWaitAfterError: Long = THREE_SECONDS
+) : ViewModel() {
+    private val uiState: MutableStateFlow<WeatherListUiState> =
+        MutableStateFlow(WeatherListUiState.Success(emptyList()))
 
-    val list: LiveData<List<Weather>>
-        get() = fetchFrom(repository).asLiveData(viewModelScope.coroutineContext)
+    init {
+        viewModelScope.launch {
+            fetchData()
+        }
+    }
 
-    private fun fetchFrom(repository: WeatherRepository): Flow<List<Weather>> {
-        return repository.fetch()
-            .catch {
-                emitAll(fetchFrom(repository))
+    private suspend fun fetchData() {
+        repository.fetch()
+            .catch { exception ->
+                uiState.value = WeatherListUiState.Error(exception)
+                resumeAfterError()
+            }.collect {
+                uiState.value = WeatherListUiState.Success(it)
             }
     }
 
-}
+    private suspend fun resumeAfterError() {
+        delay(timeToWaitAfterError)
+        fetchData()
+    }
 
+    val list: LiveData<WeatherListUiState> =
+        this.uiState.asLiveData(viewModelScope.coroutineContext)
+
+}
