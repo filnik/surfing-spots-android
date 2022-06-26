@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.margoni.surfingspots.databinding.ActivityWeatherListBinding
 import com.margoni.surfingspots.factory.Factory
+import com.margoni.surfingspots.ui.weatherList.mapper.WeatherListUiStateMapper
+import com.margoni.surfingspots.ui.weatherList.mapper.WeatherListUiStateMapperImpl
 
 class WeatherListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWeatherListBinding
@@ -23,7 +25,7 @@ class WeatherListActivity : AppCompatActivity() {
         }
 
         val viewModel: WeatherListViewModel by viewModels {
-            WeatherListViewModelFactory(Factory.WeatherRepository())
+            WeatherListViewModelFactory(Factory.WeatherRepository(), WeatherListUiStateMapperImpl())
         }
 
         viewModel.list.observe(this) { uiState ->

@@ -1,4 +1,4 @@
-package com.margoni.surfingspots.ui.weatherList
+package com.margoni.surfingspots.ui.weatherList.mapper
 
 import com.margoni.surfingspots.R
 import com.margoni.surfingspots.domain.model.Weather

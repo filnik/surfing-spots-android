@@ -3,6 +3,7 @@ package com.margoni.surfingspots.ui.weatherList
 import com.margoni.surfingspots.R
 import com.margoni.surfingspots.domain.model.City
 import com.margoni.surfingspots.domain.model.Weather
+import com.margoni.surfingspots.ui.weatherList.mapper.WeatherListUiStateMapperImpl
 import com.margoni.surfingspots.ui.weatherList.model.WeatherUiState
 import org.junit.Assert.assertEquals
 import org.junit.Test

@@ -12,28 +12,25 @@ import com.bumptech.glide.Glide
 import com.margoni.surfingspots.R
 import com.margoni.surfingspots.databinding.WeatherItemBinding
 import com.margoni.surfingspots.domain.model.Weather
+import com.margoni.surfingspots.ui.weatherList.model.WeatherUiState
 
 class WeatherListAdapter :
-    ListAdapter<Weather, WeatherListAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
+    ListAdapter<WeatherUiState, WeatherListAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
 
     class WeatherViewHolder(
         private val binding: WeatherItemBinding,
         private val context: Context
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(weather: Weather) {
+        fun bind(weather: WeatherUiState) {
             binding.apply {
-                cityName.text = weather.city.name
-                weatherDescription.text =
-                    "${if (weather.isSunny) "Sunny" else "Cloudy"} - ${weather.temperature} degrees"
-
-                val foregroundColor =
-                    if (weather.isSunny) R.color.sunny_foreground else R.color.cloudy_foreground
+                cityName.text = weather.city
+                weatherDescription.text = weather.description
                 cityImage.foreground =
-                    ColorDrawable(ContextCompat.getColor(context, foregroundColor))
+                    ColorDrawable(ContextCompat.getColor(context, weather.foregroundColor))
 
                 Glide.with(context)
-                    .load(weather.city.imageUrl)
+                    .load(weather.imageUrl)
                     .centerCrop()
                     .into(cityImage);
             }
@@ -49,13 +46,13 @@ class WeatherListAdapter :
         holder.bind(currentList[position])
     }
 
-    private class WeatherDiffCallback : DiffUtil.ItemCallback<Weather>() {
+    private class WeatherDiffCallback : DiffUtil.ItemCallback<WeatherUiState>() {
 
-        override fun areItemsTheSame(oldItem: Weather, newItem: Weather): Boolean {
-            return oldItem.city.name == newItem.city.name
+        override fun areItemsTheSame(oldItem: WeatherUiState, newItem: WeatherUiState): Boolean {
+            return oldItem.city == newItem.city
         }
 
-        override fun areContentsTheSame(oldItem: Weather, newItem: Weather): Boolean {
+        override fun areContentsTheSame(oldItem: WeatherUiState, newItem: WeatherUiState): Boolean {
             return oldItem == newItem
         }
 
