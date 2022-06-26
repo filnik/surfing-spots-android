@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.margoni.surfingspots.data.WeatherRepository
+import com.margoni.surfingspots.domain.model.Weather
+import com.margoni.surfingspots.ui.weatherList.model.WeatherUiState
 import com.margoni.surfingspots.utils.Constants.THREE_SECONDS
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,3 +46,8 @@ class WeatherListViewModel(
         this.uiState.asLiveData(viewModelScope.coroutineContext)
 
 }
+
+interface WeatherListUiStateMapper {
+    fun map(from: List<Weather>): List<WeatherUiState>
+}
+
