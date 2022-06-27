@@ -7,6 +7,7 @@ import androidx.appcompat.R.style.Base_Theme_AppCompat_Light_Dialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.margoni.surfingspots.R
 import com.margoni.surfingspots.databinding.ActivityWeatherListBinding
 import com.margoni.surfingspots.factory.Factory
 import com.margoni.surfingspots.ui.weatherList.mapper.WeatherListUiStateMapperImpl
@@ -34,14 +35,14 @@ class WeatherListActivity : AppCompatActivity() {
         viewModel.list.observe(this) { uiState ->
             when (uiState) {
                 is WeatherListUiState.Success -> weatherListAdapter.submitList(uiState.list)
-                is WeatherListUiState.Retrying -> showMessage(uiState.message)
+                is WeatherListUiState.Retrying -> showRetryingMessage(uiState.attempt)
                 is WeatherListUiState.Failure -> showErrorDialog(uiState.error)
             }
         }
     }
 
-    private fun showMessage(message: String) {
-        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+    private fun showRetryingMessage(attempt: Long) {
+        Toast.makeText(applicationContext, getString(R.string.retrying_message, attempt), Toast.LENGTH_SHORT).show()
     }
 
     private fun showErrorDialog(error: Error) {

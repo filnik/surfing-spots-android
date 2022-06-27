@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Surfing Spots</string>
-    <string name="numbers_api_domain">numbersapi.com</string>
+    <string name="retrying_message">A network error occurred, retrying to connect attempt %s…</string>
 </resources>

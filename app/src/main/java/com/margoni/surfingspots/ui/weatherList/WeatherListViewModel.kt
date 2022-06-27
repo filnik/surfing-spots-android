@@ -45,8 +45,7 @@ class WeatherListViewModel(
             .map { mapper.map(it) }
             .retryWhen { cause, attempt ->
                 if (attempt < retryAttempts && cause is NetworkException) {
-                    uiState.value =
-                        WeatherListUiState.Retrying("A network error occurred, retrying to connect attempt ${attempt + 1}...")
+                    uiState.value = WeatherListUiState.Retrying(attempt + 1)
                     delay(timeToWaitAfterError)
                     return@retryWhen true
                 }

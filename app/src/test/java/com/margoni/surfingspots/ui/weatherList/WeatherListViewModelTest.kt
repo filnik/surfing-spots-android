@@ -79,7 +79,7 @@ class WeatherListViewModelTest {
         val actual = valueObservedFrom(liveData = viewModel.list)
 
         assertEquals(
-            WeatherListUiState.Retrying("A network error occurred, retrying to connect attempt 1..."),
+            WeatherListUiState.Retrying(1),
             actual
         )
     }
