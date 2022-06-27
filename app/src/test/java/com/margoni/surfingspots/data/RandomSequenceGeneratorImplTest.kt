@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 
 class RandomSequenceGeneratorImplTest {
     private val generator = RandomSequenceGeneratorImpl()
+
     @Test
     fun `random sequence generator`() {
         val sequences = (0 until 100).map { generator.generate(3) }

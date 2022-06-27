@@ -39,7 +39,7 @@ class WeatherListViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(StandardTestDispatcher())
-        repository = mockk()
+        repository = mockk(relaxed = true)
         mapper = mockk()
         viewModel = WeatherListViewModel(repository, mapper, 1)
     }
@@ -94,6 +94,14 @@ class WeatherListViewModelTest {
         val actual = valueObservedFrom(liveData = viewModel.uiState)
 
         val expected = WeatherListUiState(emptyList(), false, false, 0, NetworkError())
+        assertThat(actual).isEqualTo(expected)
+    }
+
+    @Test
+    fun `loader when init`() = runTest {
+        val actual = valueObservedFrom(liveData = viewModel.uiState)
+
+        val expected = WeatherListUiState(emptyList(), true, false, 0, null)
         assertThat(actual).isEqualTo(expected)
     }
 
