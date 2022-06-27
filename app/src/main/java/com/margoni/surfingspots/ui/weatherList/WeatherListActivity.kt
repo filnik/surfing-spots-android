@@ -3,12 +3,10 @@ package com.margoni.surfingspots.ui.weatherList
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.R.style.Base_Theme_AppCompat_Light_Dialog
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.margoni.surfingspots.R
 import com.margoni.surfingspots.databinding.ActivityWeatherListBinding
 import com.margoni.surfingspots.factory.Factory
@@ -39,13 +37,11 @@ class WeatherListActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUiState(uiState: WeatherListUiState) {
-        with(uiState) {
-            weatherListAdapter.submitList(uiState.list)
-            binding.loader.isVisible = isLoading
-            if (isRetrying) showRetryingMessage(attempt)
-            if (error != null) showErrorDialog(error)
-        }
+    private fun updateUiState(uiState: WeatherListUiState) = with(uiState) {
+        weatherListAdapter.submitList(uiState.list)
+        binding.loader.isVisible = isLoading
+        if (isRetrying) showRetryingMessage(attempt)
+        if (error != null) showErrorDialog(error)
     }
 
     private fun showRetryingMessage(attempt: Long) {
