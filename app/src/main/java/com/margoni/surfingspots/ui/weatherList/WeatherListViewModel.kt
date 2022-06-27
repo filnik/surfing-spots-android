@@ -45,14 +45,7 @@ class WeatherListViewModel(
         emitLoading()
         repository.fetch()
             .map { mapper.map(it) }
-            .retryWhen { cause, attempt ->
-                if (attempt < retryAttempts && cause is NetworkException) {
-                    emitRetrying(attempt + 1)
-                    delay(timeToWaitAfterError)
-                    return@retryWhen true
-                }
-                false
-            }
+            .retryWhen(handleRetry())
             .catch { exception ->
                 val error = mapErrorFrom(exception)
                 emitFailure(error)
@@ -60,6 +53,16 @@ class WeatherListViewModel(
                 emitSuccess(list)
             }
     }
+
+    private fun handleRetry(): suspend FlowCollector<List<WeatherUiState>>.(cause: Throwable, attempt: Long) -> Boolean =
+        retry@{ cause, attempt ->
+            if (cause is NetworkException && attempt < retryAttempts) {
+                emitRetrying(attempt + 1)
+                delay(timeToWaitAfterError)
+                return@retry true
+            }
+            false
+        }
 
     private suspend fun emitSuccess(list: List<WeatherUiState>) {
         uiState.emit(uiState.value.success(list))
