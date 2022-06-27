@@ -17,8 +17,7 @@ class CitiesApiClient(
 
     override suspend fun fetch(): CitiesApiResponse = withContext(defaultDispatcher) {
         val json = client.get(endpoint)
-        val response = deserializer.from(json!!, CitiesApiResponse::class.java)
-        return@withContext response
+        return@withContext deserializer.from(json!!, CitiesApiResponse::class.java)
     }
 
 }
