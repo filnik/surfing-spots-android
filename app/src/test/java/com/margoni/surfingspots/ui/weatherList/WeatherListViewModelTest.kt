@@ -58,7 +58,7 @@ class WeatherListViewModelTest {
 
         val actual = valueObservedFrom(liveData = viewModel.list)
 
-        assertEquals(WeatherListUiState(expectedList, false, 0 , null), actual)
+        assertEquals(WeatherListUiState(expectedList, false, false, 0 , null), actual)
     }
 
     @Test
@@ -68,7 +68,7 @@ class WeatherListViewModelTest {
 
         val actual = valueObservedFrom(liveData = viewModel.list)
 
-        assertEquals(WeatherListUiState(emptyList(), false, 0, GenericError()), actual)
+        assertEquals(WeatherListUiState(emptyList(), false,false, 0, GenericError()), actual)
     }
 
     @Test
@@ -78,10 +78,7 @@ class WeatherListViewModelTest {
 
         val actual = valueObservedFrom(liveData = viewModel.list)
 
-        assertEquals(
-            WeatherListUiState(emptyList(), true, 1, null),
-            actual
-        )
+        assertEquals(WeatherListUiState(emptyList(), false, true, 1, null), actual)
     }
 
     @Test
@@ -92,7 +89,7 @@ class WeatherListViewModelTest {
 
         val actual = valueObservedFrom(liveData = viewModel.list)
 
-        assertEquals(WeatherListUiState(emptyList(), false, 0, NetworkError()), actual)
+        assertEquals(WeatherListUiState(emptyList(), false, false, 0, NetworkError()), actual)
     }
 
     private fun initViewModelWithZeroRetryAttempts() {
