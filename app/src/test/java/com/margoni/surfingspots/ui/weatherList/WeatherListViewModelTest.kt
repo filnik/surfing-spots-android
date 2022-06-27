@@ -19,6 +19,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -26,6 +27,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
+@ExperimentalCoroutinesApi
 class WeatherListViewModelTest {
     private lateinit var repository: WeatherRepository
     private lateinit var mapper: WeatherListUiStateMapper
@@ -58,7 +60,8 @@ class WeatherListViewModelTest {
 
         val actual = valueObservedFrom(liveData = viewModel.list)
 
-        assertEquals(WeatherListUiState(expectedList, false, false, 0 , null), actual)
+        val expected = WeatherListUiState(expectedList, false, false, 0, null)
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
@@ -68,7 +71,8 @@ class WeatherListViewModelTest {
 
         val actual = valueObservedFrom(liveData = viewModel.list)
 
-        assertEquals(WeatherListUiState(emptyList(), false,false, 0, GenericError()), actual)
+        val expected = WeatherListUiState(emptyList(), false, false, 0, GenericError())
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
@@ -78,7 +82,8 @@ class WeatherListViewModelTest {
 
         val actual = valueObservedFrom(liveData = viewModel.list)
 
-        assertEquals(WeatherListUiState(emptyList(), false, true, 1, null), actual)
+        val expected = WeatherListUiState(emptyList(), false, true, 1, null)
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
@@ -89,7 +94,8 @@ class WeatherListViewModelTest {
 
         val actual = valueObservedFrom(liveData = viewModel.list)
 
-        assertEquals(WeatherListUiState(emptyList(), false, false, 0, NetworkError()), actual)
+        val expected = WeatherListUiState(emptyList(), false, false, 0, NetworkError())
+        assertThat(actual).isEqualTo(expected)
     }
 
     private fun initViewModelWithZeroRetryAttempts() {
