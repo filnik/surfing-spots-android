@@ -5,13 +5,12 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.margoni.surfingspots.R
 import com.margoni.surfingspots.databinding.WeatherItemBinding
-import com.margoni.surfingspots.domain.model.Weather
 import com.margoni.surfingspots.ui.weatherList.model.WeatherUiState
 
 class WeatherListAdapter :
@@ -22,7 +21,7 @@ class WeatherListAdapter :
         private val context: Context
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(weather: WeatherUiState) {
+        fun bind(weather: WeatherUiState, isLast: Boolean) {
             binding.apply {
                 cityName.text = weather.city
                 weatherDescription.text = weather.description
@@ -32,7 +31,9 @@ class WeatherListAdapter :
                 Glide.with(context)
                     .load(weather.imageUrl)
                     .centerCrop()
-                    .into(cityImage);
+                    .into(cityImage)
+
+                lastItemMarginBottom.isVisible = isLast
             }
         }
     }
@@ -43,7 +44,7 @@ class WeatherListAdapter :
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        holder.bind(currentList[position], position == currentList.lastIndex)
     }
 
     private class WeatherDiffCallback : DiffUtil.ItemCallback<WeatherUiState>() {
