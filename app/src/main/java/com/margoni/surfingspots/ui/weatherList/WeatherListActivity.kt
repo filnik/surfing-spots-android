@@ -32,7 +32,7 @@ class WeatherListActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@WeatherListActivity)
         }
 
-        viewModel.list.observe(this) { uiState ->
+        viewModel.uiState.observe(this) { uiState ->
             updateUiState(uiState)
         }
     }

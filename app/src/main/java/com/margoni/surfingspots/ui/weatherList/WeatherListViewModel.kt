@@ -21,15 +21,18 @@ class WeatherListViewModel(
     private val repository: WeatherRepository,
     private val mapper: WeatherListUiStateMapper,
     private val retryAttempts: Long = THREE_ATTEMPTS,
-    private val timeToWaitAfterError: Long = THREE_SECONDS
+    private val timeToWaitBeforeRetry: Long = THREE_SECONDS
 
 ) : ViewModel() {
-    private val uiState: MutableStateFlow<WeatherListUiState> =
+    private val _uiState: MutableStateFlow<WeatherListUiState> =
         MutableStateFlow(WeatherListUiState())
 
     init {
         initialize()
     }
+
+    val uiState: LiveData<WeatherListUiState> =
+        this._uiState.asLiveData(viewModelScope.coroutineContext)
 
     fun resume() {
         initialize()
@@ -45,7 +48,14 @@ class WeatherListViewModel(
         emitLoading()
         repository.fetch()
             .map { mapper.map(it) }
-            .retryWhen(handleRetry())
+            .retryWhen { cause, attempt ->
+                if (cause is NetworkException && attempt < retryAttempts) {
+                    emitRetrying(attempt + 1)
+                    delay(timeToWaitBeforeRetry)
+                    return@retryWhen true
+                }
+                false
+            }
             .catch { exception ->
                 val error = mapErrorFrom(exception)
                 emitFailure(error)
@@ -54,30 +64,20 @@ class WeatherListViewModel(
             }
     }
 
-    private fun handleRetry(): suspend FlowCollector<List<WeatherUiState>>.(cause: Throwable, attempt: Long) -> Boolean =
-        retry@{ cause, attempt ->
-            if (cause is NetworkException && attempt < retryAttempts) {
-                emitRetrying(attempt + 1)
-                delay(timeToWaitAfterError)
-                return@retry true
-            }
-            false
-        }
-
-    private suspend fun emitSuccess(list: List<WeatherUiState>) {
-        uiState.emit(uiState.value.success(list))
+    private suspend fun emitSuccess(list: List<WeatherUiState>) = with(_uiState) {
+        emit(value.success(list))
     }
 
-    private suspend fun emitFailure(error: Error) {
-        uiState.emit(uiState.value.failure(error))
+    private suspend fun emitFailure(error: Error) = with(_uiState) {
+        emit(value.failure(error))
     }
 
-    private suspend fun emitRetrying(attempt: Long) {
-        uiState.emit(uiState.value.retrying(attempt))
+    private suspend fun emitRetrying(attempt: Long) = with(_uiState) {
+        emit(value.retrying(attempt))
     }
 
-    private suspend fun emitLoading() {
-        uiState.emit(uiState.value.loading())
+    private suspend fun emitLoading() = with(_uiState) {
+        emit(value.loading())
     }
 
     private fun mapErrorFrom(exception: Throwable): Error {
@@ -86,8 +86,5 @@ class WeatherListViewModel(
             else -> GenericError()
         }
     }
-
-    val list: LiveData<WeatherListUiState> =
-        this.uiState.asLiveData(viewModelScope.coroutineContext)
 
 }

@@ -21,7 +21,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -58,7 +57,7 @@ class WeatherListViewModelTest {
         val expectedList = listOf(WeatherUiState("cityName", "description", "imageUrl", 1))
         coEvery { mapper.map(weatherList) } returns expectedList
 
-        val actual = valueObservedFrom(liveData = viewModel.list)
+        val actual = valueObservedFrom(liveData = viewModel.uiState)
 
         val expected = WeatherListUiState(expectedList, false, false, 0, null)
         assertThat(actual).isEqualTo(expected)
@@ -69,7 +68,7 @@ class WeatherListViewModelTest {
         val exception = RuntimeException("Text Exception")
         coEvery { repository.fetch() } returns flow { throw exception }
 
-        val actual = valueObservedFrom(liveData = viewModel.list)
+        val actual = valueObservedFrom(liveData = viewModel.uiState)
 
         val expected = WeatherListUiState(emptyList(), false, false, 0, GenericError())
         assertThat(actual).isEqualTo(expected)
@@ -80,7 +79,7 @@ class WeatherListViewModelTest {
         val exception = NetworkException()
         coEvery { repository.fetch() } returns flow { throw exception }
 
-        val actual = valueObservedFrom(liveData = viewModel.list)
+        val actual = valueObservedFrom(liveData = viewModel.uiState)
 
         val expected = WeatherListUiState(emptyList(), false, true, 1, null)
         assertThat(actual).isEqualTo(expected)
@@ -92,7 +91,7 @@ class WeatherListViewModelTest {
         val exception = NetworkException()
         coEvery { repository.fetch() } returns flow { throw exception } andThen flow { throw exception }
 
-        val actual = valueObservedFrom(liveData = viewModel.list)
+        val actual = valueObservedFrom(liveData = viewModel.uiState)
 
         val expected = WeatherListUiState(emptyList(), false, false, 0, NetworkError())
         assertThat(actual).isEqualTo(expected)
