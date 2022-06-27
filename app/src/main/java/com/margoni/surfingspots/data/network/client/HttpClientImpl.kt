@@ -1,5 +1,6 @@
 package com.margoni.surfingspots.data.network.client
 
+import com.margoni.surfingspots.data.network.NetworkException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,16 +11,20 @@ import java.nio.charset.StandardCharsets
 
 class HttpClientImpl(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-): HttpClient {
+) : HttpClient {
 
-    override suspend fun get(url: String, params: Map<String, String>): String? = withContext(ioDispatcher) {
-        val url = if (params.isEmpty()) url else "$url?${urlEncode(params)}"
+    override suspend fun get(url: String, params: Map<String, String>): String = withContext(ioDispatcher) {
+        try {
+            val url = if (params.isEmpty()) url else "$url?${urlEncode(params)}"
 
-        val connection = URL(url).openConnection() as HttpURLConnection
+            val connection = URL(url).openConnection() as HttpURLConnection
 
-        connection.requestMethod = HttpMethod.GET
+            connection.requestMethod = HttpMethod.GET
 
-        return@withContext connection.inputStream?.bufferedReader()?.readText()
+            return@withContext connection.inputStream?.bufferedReader()?.readText()!!
+        } catch (t: Throwable) {
+            throw NetworkException()
+        }
     }
 
     private fun urlEncode(params: Map<String, String>): String {
