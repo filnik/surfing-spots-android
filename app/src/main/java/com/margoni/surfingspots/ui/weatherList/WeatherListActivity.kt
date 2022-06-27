@@ -57,8 +57,8 @@ class WeatherListActivity : AppCompatActivity() {
             .setTitle(error.title)
             .setMessage(error.message)
             .setCancelable(false)
-            .setNegativeButton("close app") { _, _ -> finish() }
-            .setPositiveButton("resume") { _, _ -> viewModel.resume() }
+            .setNegativeButton(getString(R.string.close_app_button_title)) { _, _ -> finish() }
+            .setPositiveButton(getString(R.string.resume_button_title)) { _, _ -> viewModel.resume() }
             .show()
     }
 
