@@ -39,7 +39,7 @@ class WeatherListActivity : AppCompatActivity() {
 
     private fun updateUiState(uiState: WeatherListUiState) = with(uiState) {
         weatherListAdapter.submitList(uiState.list)
-        binding.loader.isVisible = isLoading
+        binding.loader.isVisible = isLoading || isRetrying
         if (isRetrying) showRetryingMessage(attempt)
         if (error != null) showErrorDialog(error)
     }
