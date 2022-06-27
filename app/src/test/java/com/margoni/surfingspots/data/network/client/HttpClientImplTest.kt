@@ -5,10 +5,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @ExperimentalCoroutinesApi
+@Disabled
 class HttpClientImplTest {
     private val testDispatcher = StandardTestDispatcher()
 
