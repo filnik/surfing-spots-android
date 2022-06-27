@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.R.style.Base_Theme_AppCompat_Light_Dialog
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,20 +34,28 @@ class WeatherListActivity : AppCompatActivity() {
         }
 
         viewModel.list.observe(this) { uiState ->
-            when (uiState) {
-                is WeatherListUiState.Success -> weatherListAdapter.submitList(uiState.list)
-                is WeatherListUiState.Retrying -> showRetryingMessage(uiState.attempt)
-                is WeatherListUiState.Failure -> showErrorDialog(uiState.error)
-            }
+            updateUiState(uiState)
+        }
+    }
+
+    private fun updateUiState(uiState: WeatherListUiState) {
+        with(uiState) {
+            weatherListAdapter.submitList(uiState.list)
+            if (isRetrying) showRetryingMessage(attempt)
+            if (error != null) showErrorDialog(error)
         }
     }
 
     private fun showRetryingMessage(attempt: Long) {
-        Toast.makeText(applicationContext, getString(R.string.retrying_message, attempt), Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            applicationContext,
+            getString(R.string.retrying_message, attempt),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun showErrorDialog(error: Error) {
-        MaterialAlertDialogBuilder(this, Base_Theme_AppCompat_Light_Dialog)
+        AlertDialog.Builder(this, R.style.AlertDialogTheme)
             .setTitle(error.title)
             .setMessage(error.message)
             .setCancelable(false)

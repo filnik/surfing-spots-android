@@ -24,7 +24,7 @@ class WeatherListViewModel(
 
 ) : ViewModel() {
     private val uiState: MutableStateFlow<WeatherListUiState> =
-        MutableStateFlow(WeatherListUiState.Success(emptyList()))
+        MutableStateFlow(WeatherListUiState())
 
     init {
         initialize()
@@ -45,7 +45,7 @@ class WeatherListViewModel(
             .map { mapper.map(it) }
             .retryWhen { cause, attempt ->
                 if (attempt < retryAttempts && cause is NetworkException) {
-                    uiState.value = WeatherListUiState.Retrying(attempt + 1)
+                    uiState.value = uiState.value.retrying(attempt + 1)
                     delay(timeToWaitAfterError)
                     return@retryWhen true
                 }
@@ -53,9 +53,9 @@ class WeatherListViewModel(
             }
             .catch { exception ->
                 val error = mapErrorFrom(exception)
-                uiState.value = WeatherListUiState.Failure(error)
-            }.collect {
-                uiState.value = WeatherListUiState.Success(it)
+                uiState.value = uiState.value.failure(error)
+            }.collect { list ->
+                uiState.value = uiState.value.success(list)
             }
     }
 
