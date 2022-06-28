@@ -4,5 +4,6 @@ data class WeatherUiState(
     val city: String,
     val description: String,
     val imageUrl: String,
-    val foregroundColor: Int
+    val foregroundColor: Int,
+    val index: Int
 )

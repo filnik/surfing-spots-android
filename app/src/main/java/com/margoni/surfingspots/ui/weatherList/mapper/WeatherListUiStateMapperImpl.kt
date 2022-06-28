@@ -7,13 +7,14 @@ import com.margoni.surfingspots.ui.weatherList.model.WeatherUiState
 class WeatherListUiStateMapperImpl : WeatherListUiStateMapper {
 
     override fun map(from: List<Weather>): List<WeatherUiState> {
-        return from.map {
-            val isSunny = it.temperature >= 30
+        return from.mapIndexed { index, item ->
+            val isSunny = item.temperature >= 30
             WeatherUiState(
-                it.city.name,
-                "${if (isSunny) "Sunny" else "Cloudy"} - ${it.temperature} degrees",
-                it.city.imageUrl,
-                if (isSunny) R.color.sunny_foreground else R.color.cloudy_foreground
+                item.city.name,
+                "${if (isSunny) "Sunny" else "Cloudy"} - ${item.temperature} degrees",
+                item.city.imageUrl,
+                if (isSunny) R.color.sunny_foreground else R.color.cloudy_foreground,
+                index
             )
         }
     }

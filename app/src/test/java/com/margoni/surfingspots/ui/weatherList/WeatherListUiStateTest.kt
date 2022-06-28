@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class WeatherListUiStateTest {
-    private val anyList = listOf(WeatherUiState("city", "description", "imageUrl", 123))
+    private val anyList = listOf(WeatherUiState("city", "description", "imageUrl", 123, 0))
 
     @Test
     fun loading() {
