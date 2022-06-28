@@ -12,6 +12,7 @@ import com.margoni.surfingspots.databinding.ActivityWeatherListBinding
 import com.margoni.surfingspots.factory.Factory
 import com.margoni.surfingspots.ui.weatherList.mapper.WeatherListUiStateMapperImpl
 import com.margoni.surfingspots.ui.weatherList.model.Error
+import com.margoni.surfingspots.ui.weatherList.model.WeatherUiState
 
 class WeatherListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWeatherListBinding
@@ -33,15 +34,23 @@ class WeatherListActivity : AppCompatActivity() {
         }
 
         viewModel.uiState.observe(this) { uiState ->
-            updateUiState(uiState)
+            updateUi(uiState)
         }
     }
 
-    private fun updateUiState(uiState: WeatherListUiState) = with(uiState) {
-        weatherListAdapter.submitList(uiState.list)
-        binding.loader.isVisible = isLoading || isRetrying
+    private fun updateUi(state: WeatherListUiState) = with(state) {
+        updateList(state.list)
+        setLoaderVisibility(isLoading)
         if (isRetrying) showRetryingMessage(attempt)
         if (error != null) showErrorDialog(error)
+    }
+
+    private fun updateList(list: List<WeatherUiState>) {
+        weatherListAdapter.submitList(list)
+    }
+
+    private fun setLoaderVisibility(isVisible: Boolean) {
+        binding.loader.isVisible = isVisible
     }
 
     private fun showRetryingMessage(attempt: Long) {

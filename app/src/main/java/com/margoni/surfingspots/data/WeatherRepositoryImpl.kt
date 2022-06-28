@@ -20,33 +20,38 @@ class WeatherRepositoryImpl(
     private val refreshIntervalMs: Long = THREE_SECONDS
 ) : WeatherRepository {
 
-    override fun fetch(): Flow<List<Weather>> {
+    override fun fetch(): Flow<WeathersData> {
         return flow {
             init()
-            delay(refreshIntervalMs)
             startUpdate()
         }.flowOn(defaultDispatcher)
     }
 
-    private suspend fun FlowCollector<List<Weather>>.init() = with(state) {
+    private suspend fun FlowCollector<WeathersData>.init() = with(state) {
         if (weathers.isEmpty()) {
+            emitStartFetchingData()
             cityDataSource.list()
                 .map { city -> Weather(city, localRandomTemperatureGenerator.generate()) }
                 .also { weathers.addAll(it) }
             index = 0
             randomSequence = randomSequenceGenerator.generate(state.weathers.size)
-            emit()
+            emitData()
+            emitStopFetchingData()
+            delay(refreshIntervalMs)
         }
     }
 
-    private suspend fun FlowCollector<List<Weather>>.startUpdate() = with(state) {
+    private suspend fun FlowCollector<WeathersData>.startUpdate() = with(state) {
         while (true) {
+            emitStartFetchingData()
+
             weathers.updateTemperatureOf(
                 elementAt = randomSequence[index],
                 temperature = remoteRandomTemperatureGenerator.generate()
             )
 
-            emit()
+            emitData()
+            emitStopFetchingData()
 
             index++
 
@@ -63,8 +68,16 @@ class WeatherRepositoryImpl(
         state.randomSequence = randomSequenceGenerator.nextSequence(from = state.randomSequence)
     }
 
-    private suspend fun FlowCollector<List<Weather>>.emit() {
-        emit(state.weathers.sortedByDescendingTemperature())
+    private suspend fun FlowCollector<WeathersData>.emitData() {
+        emit(WeathersData.Data(state.weathers.sortedByDescendingTemperature()))
+    }
+
+    private suspend fun FlowCollector<WeathersData>.emitStartFetchingData() {
+        emit(WeathersData.Fetching(true))
+    }
+
+    private suspend fun FlowCollector<WeathersData>.emitStopFetchingData() {
+        emit(WeathersData.Fetching(false))
     }
 
     private fun Iterable<Weather>.sortedByDescendingTemperature() =
@@ -84,4 +97,9 @@ class WeatherRepositoryImpl(
         var randomSequence: List<Int> = emptyList()
     )
 
+}
+
+sealed class WeathersData {
+    data class Fetching(val status: Boolean): WeathersData()
+    data class Data(val list: List<Weather>): WeathersData()
 }

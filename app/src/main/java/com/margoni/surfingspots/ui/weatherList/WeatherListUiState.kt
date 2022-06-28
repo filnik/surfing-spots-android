@@ -11,10 +11,10 @@ data class WeatherListUiState(
     val error: Error? = null
 ) {
 
-    fun loading(): WeatherListUiState {
+    fun loading(isLoading: Boolean): WeatherListUiState {
         return WeatherListUiState(
             list = list,
-            isLoading = true,
+            isLoading = isLoading,
             isRetrying = false,
             attempt = 0,
             error = null
@@ -24,7 +24,7 @@ data class WeatherListUiState(
     fun success(list: List<WeatherUiState>): WeatherListUiState {
         return WeatherListUiState(
             list = list,
-            isLoading = false,
+            isLoading = isLoading,
             isRetrying = false,
             attempt = 0,
             error = null
@@ -34,7 +34,7 @@ data class WeatherListUiState(
     fun retrying(attempt: Long): WeatherListUiState {
         return WeatherListUiState(
             list = list,
-            isLoading = false,
+            isLoading = true,
             isRetrying = true,
             attempt = attempt,
             error = null

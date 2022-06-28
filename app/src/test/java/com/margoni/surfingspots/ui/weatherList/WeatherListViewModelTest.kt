@@ -3,6 +3,7 @@ package com.margoni.surfingspots.ui.weatherList
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.margoni.surfingspots.TestUtils.valueObservedFrom
 import com.margoni.surfingspots.data.WeatherRepository
+import com.margoni.surfingspots.data.WeathersData
 import com.margoni.surfingspots.data.network.NetworkException
 import com.margoni.surfingspots.domain.model.City
 import com.margoni.surfingspots.domain.model.Weather
@@ -53,7 +54,7 @@ class WeatherListViewModelTest {
     @Test
     fun `fetch weather list successfully`() = runTest {
         val weatherList = listOf(Weather(City("cityName", "imageUrl"), 12))
-        coEvery { repository.fetch() } returns flow { emit(weatherList) }
+        coEvery { repository.fetch() } returns flow { emit(WeathersData.Data(weatherList)) }
         val expectedList = listOf(WeatherUiState("cityName", "description", "imageUrl", 1, true))
         coEvery { mapper.map(weatherList) } returns expectedList
 
@@ -81,7 +82,7 @@ class WeatherListViewModelTest {
 
         val actual = valueObservedFrom(liveData = viewModel.uiState)
 
-        val expected = WeatherListUiState(emptyList(), false, true, 1, null)
+        val expected = WeatherListUiState(emptyList(), true, true, 1, null)
         assertThat(actual).isEqualTo(expected)
     }
 
@@ -98,10 +99,22 @@ class WeatherListViewModelTest {
     }
 
     @Test
-    fun `loader when init`() = runTest {
+    fun `emit loader when repository is fetching`() = runTest {
+        coEvery { repository.fetch() } returns flow { emit(WeathersData.Fetching(true)) }
+
         val actual = valueObservedFrom(liveData = viewModel.uiState)
 
         val expected = WeatherListUiState(emptyList(), true, false, 0, null)
+        assertThat(actual).isEqualTo(expected)
+    }
+
+    @Test
+    fun `emit stop loader when repository is not fetching`() = runTest {
+        coEvery { repository.fetch() } returns flow { emit(WeathersData.Fetching(false)) }
+
+        val actual = valueObservedFrom(liveData = viewModel.uiState)
+
+        val expected = WeatherListUiState(emptyList(), false, false, 0, null)
         assertThat(actual).isEqualTo(expected)
     }
 

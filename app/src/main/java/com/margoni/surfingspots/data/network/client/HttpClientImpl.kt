@@ -20,7 +20,8 @@ class HttpClientImpl(
                 val url = if (params.isEmpty()) url else "$url?${urlEncode(params)}"
 
                 val connection = URL(url).openConnection() as HttpURLConnection
-
+                connection.connectTimeout = 10000
+                connection.readTimeout = 10000
                 connection.requestMethod = HttpMethod.GET
 
                 if (connection.responseCode != HTTP_OK) {

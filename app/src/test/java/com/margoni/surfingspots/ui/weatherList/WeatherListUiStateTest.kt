@@ -13,7 +13,7 @@ class WeatherListUiStateTest {
     fun loading() {
         val initialState = WeatherListUiState(anyList, false, false, 0, null)
 
-        val actualState = initialState.loading()
+        val actualState = initialState.loading(true)
 
         assertThat(actualState).isEqualTo(initialState.copy(isLoading = true))
     }
@@ -24,7 +24,7 @@ class WeatherListUiStateTest {
 
         val actualState = initialState.success(anyList)
 
-        assertThat(actualState).isEqualTo(WeatherListUiState(anyList, false, false, 0, null))
+        assertThat(actualState).isEqualTo(WeatherListUiState(anyList, true, false, 0, null))
     }
 
     @Test
@@ -38,11 +38,11 @@ class WeatherListUiStateTest {
 
     @Test
     fun retrying() {
-        val initialState = WeatherListUiState(anyList, true, false, 0, GenericError())
+        val initialState = WeatherListUiState(anyList, false, false, 0, GenericError())
 
         val actualState = initialState.retrying(50)
 
-        assertThat(actualState).isEqualTo(WeatherListUiState(anyList, false, true, 50, null))
+        assertThat(actualState).isEqualTo(WeatherListUiState(anyList, true, true, 50, null))
     }
 
 }

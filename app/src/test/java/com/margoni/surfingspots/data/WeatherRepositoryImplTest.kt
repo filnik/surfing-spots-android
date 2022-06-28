@@ -35,44 +35,72 @@ class WeatherRepositoryImplTest {
         coEvery { randomSequenceGenerator.nextSequence( listOf(1, 2, 0)) } returns listOf(2, 0, 1)
         coEvery { remoteRandomTemperatureGenerator.generate() } returnsMany listOf(34, 12, 46, 54, 60, 57)
 
-        val actual: List<List<Weather>> = repository.fetch().take(7).toList()
+        val actual: List<WeathersData> = repository.fetch().take(21).toList()
 
-        val expectedFlows = listOf (
-            listOf(
-                Weather(cityList[1], 54),
-                Weather(cityList[2], 43),
-                Weather(cityList[0], 6)
+        val expectedFlows = listOf(
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[1], 54),
+                    Weather(cityList[2], 43),
+                    Weather(cityList[0], 6)
+                )
             ),
-            listOf(
-                Weather(cityList[2], 43),
-                Weather(cityList[1], 34),
-                Weather(cityList[0], 6)
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[2], 43),
+                    Weather(cityList[1], 34),
+                    Weather(cityList[0], 6)
+                )
             ),
-            listOf(
-                Weather(cityList[1], 34),
-                Weather(cityList[2], 12),
-                Weather(cityList[0], 6)
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[1], 34),
+                    Weather(cityList[2], 12),
+                    Weather(cityList[0], 6)
+                )
             ),
-            listOf(
-                Weather(cityList[0], 46),
-                Weather(cityList[1], 34),
-                Weather(cityList[2], 12)
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[0], 46),
+                    Weather(cityList[1], 34),
+                    Weather(cityList[2], 12)
+                )
             ),
-            listOf(
-                Weather(cityList[2], 54),
-                Weather(cityList[0], 46),
-                Weather(cityList[1], 34)
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[2], 54),
+                    Weather(cityList[0], 46),
+                    Weather(cityList[1], 34)
+                )
             ),
-            listOf(
-                Weather(cityList[0], 60),
-                Weather(cityList[2], 54),
-                Weather(cityList[1], 34)
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[0], 60),
+                    Weather(cityList[2], 54),
+                    Weather(cityList[1], 34)
+                )
             ),
-            listOf(
-                Weather(cityList[0], 60),
-                Weather(cityList[1], 57),
-                Weather(cityList[2], 54)
-            )
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[0], 60),
+                    Weather(cityList[1], 57),
+                    Weather(cityList[2], 54)
+                )
+            ),
+            WeathersData.Fetching(false)
         )
 
         assertThat(actual).containsSequence(expectedFlows)
@@ -99,39 +127,58 @@ class WeatherRepositoryImplTest {
         coEvery { randomSequenceGenerator.nextSequence( listOf(1, 2, 0)) } returns listOf(2, 0, 1)
         coEvery { remoteRandomTemperatureGenerator.generate() } returnsMany listOf(3, 12, 37, 54, 22)
 
-        val actual: List<List<Weather>> = repository.fetch().take(5).toList()
+        val actual: List<WeathersData> = repository.fetch().take(15).toList()
 
-        val expectedFlows = listOf (
-            listOf(
-                Weather(cityList[1], 34),
-                Weather(cityList[0], 6),
-                Weather(cityList[2], 3)
+        val expectedFlows = listOf(
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[1], 34),
+                    Weather(cityList[0], 6),
+                    Weather(cityList[2], 3)
+                )
             ),
-            listOf(
-                Weather(cityList[1], 34),
-                Weather(cityList[0], 12),
-                Weather(cityList[2], 3)
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[1], 34),
+                    Weather(cityList[0], 12),
+                    Weather(cityList[2], 3)
+                )
             ),
-            listOf(
-                Weather(cityList[2], 37),
-                Weather(cityList[1], 34),
-                Weather(cityList[0], 12)
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[2], 37),
+                    Weather(cityList[1], 34),
+                    Weather(cityList[0], 12)
+                )
             ),
-            listOf(
-                Weather(cityList[0], 54),
-                Weather(cityList[2], 37),
-                Weather(cityList[1], 34)
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[0], 54),
+                    Weather(cityList[2], 37),
+                    Weather(cityList[1], 34)
+                )
             ),
-            listOf(
-                Weather(cityList[0], 54),
-                Weather(cityList[2], 37),
-                Weather(cityList[1], 22)
-            )
+            WeathersData.Fetching(false),
+            WeathersData.Fetching(true),
+            WeathersData.Data(
+                listOf(
+                    Weather(cityList[0], 54),
+                    Weather(cityList[2], 37),
+                    Weather(cityList[1], 22)
+                )
+            ),
+            WeathersData.Fetching(false)
         )
 
         assertThat(actual).containsSequence(expectedFlows)
     }
-
 
     private fun initRepository(state: WeatherRepositoryImpl.State): WeatherRepositoryImpl {
         return WeatherRepositoryImpl(
