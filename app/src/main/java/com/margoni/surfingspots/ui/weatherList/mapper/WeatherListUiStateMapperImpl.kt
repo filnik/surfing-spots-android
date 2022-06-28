@@ -14,7 +14,7 @@ class WeatherListUiStateMapperImpl : WeatherListUiStateMapper {
                 "${if (isSunny) "Sunny" else "Cloudy"} - ${item.temperature} degrees",
                 item.city.imageUrl,
                 if (isSunny) R.color.sunny_foreground else R.color.cloudy_foreground,
-                index
+                index == from.lastIndex
             )
         }
     }

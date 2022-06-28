@@ -5,5 +5,5 @@ data class WeatherUiState(
     val description: String,
     val imageUrl: String,
     val foregroundColor: Int,
-    val index: Int
+    var isLast: Boolean
 )

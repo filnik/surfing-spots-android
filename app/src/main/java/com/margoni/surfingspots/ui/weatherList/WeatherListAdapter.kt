@@ -21,7 +21,7 @@ class WeatherListAdapter :
         private val context: Context
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(weather: WeatherUiState, isLast: Boolean) {
+        fun bind(weather: WeatherUiState) {
             binding.apply {
                 cityName.text = weather.city
                 weatherDescription.text = weather.description
@@ -33,7 +33,7 @@ class WeatherListAdapter :
                     .centerCrop()
                     .into(cityImage)
 
-                lastItemMarginBottom.isVisible = isLast
+                lastItemMarginBottom.isVisible = weather.isLast
             }
         }
     }
@@ -44,7 +44,7 @@ class WeatherListAdapter :
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        holder.bind(currentList[position], position == currentList.lastIndex)
+        holder.bind(currentList[position])
     }
 
     private class WeatherDiffCallback : DiffUtil.ItemCallback<WeatherUiState>() {

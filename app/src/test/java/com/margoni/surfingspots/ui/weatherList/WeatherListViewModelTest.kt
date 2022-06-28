@@ -54,7 +54,7 @@ class WeatherListViewModelTest {
     fun `fetch weather list successfully`() = runTest {
         val weatherList = listOf(Weather(City("cityName", "imageUrl"), 12))
         coEvery { repository.fetch() } returns flow { emit(weatherList) }
-        val expectedList = listOf(WeatherUiState("cityName", "description", "imageUrl", 1, 0))
+        val expectedList = listOf(WeatherUiState("cityName", "description", "imageUrl", 1, true))
         coEvery { mapper.map(weatherList) } returns expectedList
 
         val actual = valueObservedFrom(liveData = viewModel.uiState)

@@ -31,14 +31,14 @@ class WeatherListUiStateMapperImplTest {
                 "Sunny - 30 degrees",
                 "sunnyCityImageUrl",
                 R.color.sunny_foreground,
-                0
+                false
             ),
             WeatherUiState(
                 "Cloudy City Name",
                 "Cloudy - 29 degrees",
                 "cloudyCityImageUrl",
                 R.color.cloudy_foreground,
-                1
+                true
             )
         )
         assertThat(actual).isEqualTo(expected)
