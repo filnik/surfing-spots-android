@@ -1,9 +1,9 @@
 package com.margoni.surfingspots.data
 
-class CityImageUrlDataSourceImpl: CityImageUrlDataSource {
+class StubImageUrlDataSourceImpl: CityImageUrlDataSource {
 
     override fun imageFor(city: String): String {
-        return imageUrlMap[city] ?: ""
+        return imageUrlMap[city] ?: defaultImageUrl
     }
 
     private val imageUrlMap = mapOf(
@@ -15,4 +15,6 @@ class CityImageUrlDataSourceImpl: CityImageUrlDataSource {
         "Riccione" to "https://www.dovedormire.info/wp-content/uploads/sites/119/riccione.jpg",
         "Midgar" to "https://www.everyeye.it/public/immagini/11042020/midgar.jpg"
     )
+
+    private val defaultImageUrl = "https://www.visitlagunabeach.com/imager/images/placeholder_59451ff4b79983e7a72936324fcfd196.jpg"
 }

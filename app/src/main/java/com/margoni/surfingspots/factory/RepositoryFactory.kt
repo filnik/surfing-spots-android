@@ -22,7 +22,7 @@ object Factory {
     private fun cityDataSource(): CityDataSource {
         return CityDataSourceImpl(
             citiesApiClient(),
-            CityImageUrlDataSourceImpl()
+            StubImageUrlDataSourceImpl()
         )
     }
 
