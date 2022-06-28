@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bigger_font_size">34sp</dimen>
+    <dimen name="small_font_size">15sp</dimen>
+    <dimen name="regular_margin">16dp</dimen>
+    <dimen name="weather_card_height_size">192dp</dimen>
+    <dimen name="regular_padding">16dp</dimen>
+    <dimen name="quarter_margin">4dp</dimen>
+</resources>

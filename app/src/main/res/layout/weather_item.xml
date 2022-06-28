@@ -11,10 +11,10 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_container"
         android:layout_width="match_parent"
-        android:layout_height="192dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="@dimen/weather_card_height_size"
+        android:layout_marginStart="@dimen/regular_margin"
+        android:layout_marginTop="@dimen/regular_margin"
+        android:layout_marginEnd="@dimen/regular_margin"
         android:layout_marginBottom="0dp"
         app:cardCornerRadius="16dp">
 
@@ -37,35 +37,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp"
+                android:padding="@dimen/regular_padding"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <TextView
                     android:id="@+id/city_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginBottom="@dimen/quarter_margin"
                     android:fontFamily="@font/cormac_light"
                     android:shadowColor="@color/sunny_foreground"
                     android:shadowDx="0"
                     android:shadowDy="0"
                     android:shadowRadius="16"
                     android:textColor="@color/white"
-                    android:textSize="34sp"
+                    android:textSize="@dimen/bigger_font_size"
                     tools:text="Los Angeles" />
 
                 <TextView
                     android:id="@+id/weather_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginBottom="@dimen/quarter_margin"
                     android:fontFamily="@font/cormac_book"
                     android:shadowColor="@color/sunny_foreground"
                     android:shadowDx="0"
                     android:shadowDy="0"
                     android:shadowRadius="8"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/small_font_size"
                     tools:text="Sunny - 38 degrees" />
 
             </LinearLayout>
