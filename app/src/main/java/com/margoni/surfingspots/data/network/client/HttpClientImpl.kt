@@ -1,6 +1,7 @@
 package com.margoni.surfingspots.data.network.client
 
 import com.margoni.surfingspots.data.network.NetworkException
+import com.margoni.surfingspots.utils.Constants.THEN_SECONDS
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,8 +21,8 @@ class HttpClientImpl(
                 val url = if (params.isEmpty()) url else "$url?${urlEncode(params)}"
 
                 val connection = URL(url).openConnection() as HttpURLConnection
-                connection.connectTimeout = 10000
-                connection.readTimeout = 10000
+                connection.connectTimeout = THEN_SECONDS
+                connection.readTimeout = THEN_SECONDS
                 connection.requestMethod = HttpMethod.GET
 
                 if (connection.responseCode != HTTP_OK) {
